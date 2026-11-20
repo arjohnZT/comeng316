@@ -167,6 +167,8 @@ footer { margin-top: 2rem; border-top: 1px solid var(--line); padding-block: 1.4
 @media (max-width: 760px) { .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 390px) { .grid { grid-template-columns: minmax(0, 1fr); } a.card { min-height: auto; } }
 @media print { .wrap { width: 100%; } .sheet { padding: 0; } .columns > section:first-child, .summary { background: #fff; } }
+
+.note-date, a.card .note-date { color: var(--muted); font-size: .875rem; font-weight: 500; }
 </style>
 </head>
 <body>
@@ -203,7 +205,7 @@ window.CORNELL_WEEKS = [
   {
     "week": 1,
     "title": "Differential Amplifiers | Lessons 1–2",
-    "date": "",
+    "date": "July 29–30, 2026",
     "cues": "Essential question\nHow does a differential amplifier compare two inputs and reject a signal shared by both?\n\nKey points\n1. Differential and common-mode inputs\n\n2. Input polarity and output connections\n\n3. DC bias and tail current\n\n4. Small-signal gain\n\n5. Worked example",
     "notes": "1. Differential and common-mode inputs\nDefine v_d = v₁ − v₂ and v_cm = (v₁ + v₂)/2. The small-signal output is v_o = A_d v_d + A_cm v_cm, using gains defined for the chosen output terminals. If v₁ = v₂, the differential term is zero. A useful application is amplifying the small difference between two sensor leads that pick up the same interference.\n\n2. Input polarity and output connections\nWith v_o defined as v_C2 − v_C1, raising v₁ increases Q1 current and lowers v_C1. Q2 current falls and v_C2 rises, producing a positive differential output. Raising v₂ reverses the sign. A single-ended measurement uses one collector relative to the reference. The other collector remains connected to its bias network. For equal unloaded collector resistors, the differential output has about twice the magnitude of either single-ended response.\n\n3. DC bias and tail current\nWith both bases at 0 V, an NPN emitter pair tied through R_E to a negative supply of magnitude V_EE has I_T ≈ (V_EE − V_BE)/R_E. Ignoring V_BE gives I_T ≈ V_EE/R_E. For matched transistors, each emitter carries I_T/2 at balance. Use I_C ≈ I_E and V_C ≈ V_CC − I_C R_C to check the bias point.\n\n4. Small-signal gain\nAt room temperature, rₑ ≈ 25 mV/I_E. With matched devices, an ideal tail source, and negligible loading, |A_d| ≈ R_C/rₑ for a differential output and R_C/(2rₑ) for a single-ended output measured with the same differential excitation. If a load is connected, account for its effect on the collector resistance.\n\n5. Worked example\nLet V_EE = 5 V, V_BE = 0.7 V, R_E = 4.3 kΩ, and R_C = 2.2 kΩ. Then I_T ≈ 1 mA, I_E ≈ 0.5 mA, and rₑ ≈ 50 Ω. The differential gain is about 44 V/V and the single-ended gain magnitude is about 22 V/V. A 2 mV differential input gives approximately 88 mV between the collectors, provided the pair stays in its small-signal range.",
     "summary": "The tail current establishes the DC bias and the small-signal emitter resistance. The collector voltages move in opposite directions in response to the input difference. Defining the output connection first makes both the gain and its sign clear.",
@@ -223,7 +225,7 @@ window.CORNELL_WEEKS = [
   {
     "week": 2,
     "title": "Differential Amplifiers | Lessons 3–6",
-    "date": "",
+    "date": "August 5–6, 2026",
     "cues": "Essential question\nWhich nonideal effects limit the accuracy of a differential amplifier?\n\nKey points\n1. Input bias and offset currents\n\n2. Input offset voltage\n\n3. Common-mode gain and CMRR\n\n4. Current mirrors and active loads\n\n5. Loaded differential pair",
     "notes": "1. Input bias and offset currents\nInput bias current I_B is the average of the two input currents. Input offset current I_OS is the magnitude of their difference. Bias currents flowing through external resistances create voltage drops. Equalizing the resistances seen by both inputs can cancel much of the effect of equal bias currents, while current mismatch leaves a residual error.\n\n2. Input offset voltage\nInput offset voltage V_OS is the differential voltage needed to bring the output to the specified zero condition. In a linear closed-loop op-amp circuit, the corresponding output error is approximately the input offset multiplied by the noise gain. For example, 2 mV of offset and a noise gain of 11 produce about 22 mV of output offset before other errors are included.\n\n3. Common-mode gain and CMRR\nA finite tail impedance lets common input changes alter the branch currents. Device and resistor mismatch can turn that motion into a differential output. CMRR = |A_d/A_cm| with gains measured at the same output. For A_d = 100 and A_cm = 0.01, CMRR = 10,000, or 80 dB.\n\n4. Current mirrors and active loads\nA simple BJT mirror uses a diode-connected device to set V_BE and a matched output transistor to reproduce the reference current. The output device needs enough voltage to remain in its active region. A mirror used as a differential-stage load provides high incremental resistance and can combine opposite branch-current changes at one output node.\n\n5. Loaded differential pair\nExternal loads reduce the effective small-signal output resistance. For a resistively loaded single-ended collector, use R_C ∥ R_L in the first-order gain estimate. Check the DC bias separately if the load also draws DC current.",
     "summary": "Bias currents, input offset, and finite common-mode rejection set practical accuracy limits. Active loading can raise gain, while the output load and available voltage swing determine how much of that gain can be used.",
@@ -243,7 +245,7 @@ window.CORNELL_WEEKS = [
   {
     "week": 3,
     "title": "Operational Amplifiers | Chapter 2",
-    "date": "",
+    "date": "August 19–20, 2026",
     "cues": "Essential question\nHow do an op-amp’s internal stages and feedback determine its gain, accuracy, and speed?\n\nKey points\n1. Lesson 1 | Ideal model and internal stages\n\n2. Lesson 1 | Negative feedback\n\n3. Lesson 2 | The 741 and compensation\n\n4. Lesson 2 | Slew rate and power bandwidth\n\n5. Lesson 3 | Inverting amplifier\n\n6. Lesson 3 | Noise gain and bandwidth\n\n7. Later lessons | Non-inverting design and linear ICs",
     "notes": "1. Lesson 1 | Ideal model and internal stages\nThe ideal op-amp is a voltage-controlled voltage source. It has infinite input impedance and open-loop gain, and zero output impedance. A real device has a differential input stage, a high-gain stage, and an output stage that supplies load current. Read the + and − labels on the symbol to identify the inputs.\n\n2. Lesson 1 | Negative feedback\nIn stable linear operation, high open-loop gain keeps V₊ ≈ V₋, and the ideal input currents are zero. These approximations fail when the output clips or the amplifier operates outside its input range. A virtual ground is a node held near 0 V by feedback while drawing negligible current into the input pin.\n\n3. Lesson 2 | The 741 and compensation\nFor the common 8-pin 741 package, pins 1 and 5 are offset null, pin 2 is inverting, pin 3 is non-inverting, pin 4 is the negative supply, pin 6 is output, pin 7 is the positive supply, and pin 8 is unconnected. Internal dominant-pole compensation helps stabilize feedback. Check the datasheet for supply limits, input common-mode range, load-dependent output swing, and gain-bandwidth product.\n\n4. Lesson 2 | Slew rate and power bandwidth\nSlew rate is the maximum output slope, |dv_o/dt|. A sine wave needs a peak slope of 2πfV_p. With a typical 741 slew rate of 0.5 V/µs and a desired output of 5 V peak, f_max ≈ 500,000/(2π × 5) ≈ 15.9 kHz from slew rate alone. This large-signal limit is separate from the small-signal bandwidth.\n\n5. Lesson 3 | Inverting amplifier\nWith V₊ grounded, apply Kirchhoff’s current law at V₋ ≈ 0 to obtain A_v = −R_f/R_in. The source sees approximately R_in. With R_in = 10 kΩ and R_f = 100 kΩ, a 0.2 V input gives −2 V in linear operation. A resistor R_in ∥ R_f at the non-inverting input can reduce bias-current-induced offset when the source resistance is negligible.\n\n6. Lesson 3 | Noise gain and bandwidth\nThe inverting signal gain has magnitude R_f/R_in. Its noise gain is 1 + R_f/R_in. For a dominant-pole op-amp, closed-loop bandwidth is approximately GBW divided by noise gain. For 1 MHz GBW and noise gain 11, the small-signal bandwidth estimate is about 91 kHz. At 5 V peak, the 741 slew-rate estimate is lower, so check both limits.\n\n7. Later lessons | Non-inverting design and linear ICs\nThe non-inverting gain is 1 + R_f/R_g. Direct feedback creates a unity-gain follower, useful when a sensor needs a high-impedance input. Summing amplifiers combine multiple resistor-weighted inputs. When transferring a circuit to a surface-mount part, check its footprint and the package-specific pinout.",
     "summary": "Use the ideal model and feedback network to predict closed-loop behavior, then check the practical limits. For the 741, noise gain sets the small-signal bandwidth estimate, while slew rate and output amplitude determine a separate large-signal limit.",
@@ -263,7 +265,7 @@ window.CORNELL_WEEKS = [
   {
     "week": 4,
     "title": "Operational Amplifier Applications",
-    "date": "",
+    "date": "August 26–27, 2026",
     "cues": "Essential question\nHow can the same op-amp perform arithmetic, compare voltages, and shape signals over time?\n\nKey points\n1. Summing amplifier\n\n2. Difference amplifier\n\n3. Comparator\n\n4. Inverting integrator\n\n5. Inverting differentiator\n\n6. Circuit checks",
     "notes": "1. Summing amplifier\nApply each input through its own resistor to the inverting node. In linear operation, V_o = −R_f(V₁/R₁ + V₂/R₂ + …). Equal input resistors give equal weights. Choosing R_f = R/N gives the negative average of N inputs with equal input resistors R.\n\n2. Difference amplifier\nWith matched resistor ratios and the stated polarity, V_o = (R₂/R₁)(V₂ − V₁). Ratio matching matters because resistor mismatch converts some common-mode voltage into output error. Check each input voltage against the op-amp’s common-mode range even when the input difference is small.\n\n3. Comparator\nAn open-loop comparator changes output state according to whether V₊ or V₋ is higher. For V₊ = V_sensor and V₋ = V_ref, the output goes high when the sensor crosses above the reference. Near the threshold, noise can cause repeated transitions. Hysteresis introduces different rising and falling thresholds.\n\n4. Inverting integrator\nPlace R at the input and C in feedback. The output slope is dV_o/dt = −V_in/(RC). With R = 100 kΩ, C = 100 nF, and V_in = 0.2 V, the slope is −20 V/s. A resistor in parallel with the feedback capacitor limits the DC gain and helps prevent drift into saturation.\n\n5. Inverting differentiator\nPlace C at the input and R in feedback. Ideally V_o = −RC dV_in/dt. A rising ramp produces a constant negative output while its slope stays fixed. High-frequency noise can be amplified, so practical circuits limit the differentiating bandwidth.\n\n6. Circuit checks\nTrace the feedback path before applying V₊ ≈ V₋. Predict output polarity and magnitude, then check voltage swing, output current, bandwidth, and slew rate. An output stuck near a rail can indicate clipping, missing feedback, or a DC offset accumulating in an integrator.",
     "summary": "Resistor ratios determine arithmetic weights. Capacitor placement determines whether the output responds to accumulated input or its rate of change. A comparator uses a threshold to make a state decision.",
@@ -283,7 +285,7 @@ window.CORNELL_WEEKS = [
   {
     "week": 5,
     "title": "Mixed Signals and Data Conversion",
-    "date": "2025-10-17",
+    "date": "September 2, 2026",
     "cues": "How do analog and digital signals represent information?\nWhat is the difference between sampling and quantization?\nWhen do I use an ADC or a DAC?\nHow many codes does an N-bit converter have?",
     "notes": "An analog signal varies continuously in amplitude. A digital representation uses discrete values, typically encoded in binary. Mixed-signal systems connect the two domains.\n\nAn ADC samples the analog signal at specific times, quantizes each sample to an available amplitude level, and encodes the result. An N-bit ADC has 2ᴺ possible codes. For a fixed input span, more bits reduce the ideal size of each code step.\n\nA DAC maps a digital code to an analog voltage or current. Binary-weighted and R–2R ladder circuits are examples. An audio playback chain uses a DAC to reconstruct an electrical signal that can be amplified to drive a speaker.\n\nFor temperature monitoring, the ADC digitizes the sensor output so the microcontroller can process it. The sampling rate governs when readings occur, while resolution governs how finely the readings are represented.",
     "summary": "ADCs bring sensor and other analog signals into digital processing. DACs turn digital results into analog signals for outputs such as audio or control.",
@@ -303,7 +305,7 @@ window.CORNELL_WEEKS = [
   {
     "week": 6,
     "title": "Sensors and Transducers",
-    "date": "",
+    "date": "September 9, 2026",
     "cues": "How do sensors, transducers, and actuators differ?\nWhat does a sensor transfer function describe?\nWhich specifications matter when choosing a sensor?\nWhen is two-point calibration enough?",
     "notes": "A transducer converts energy or a signal from one form to another. A sensor reads a physical quantity such as temperature, while an actuator produces a physical effect such as motion or heat.\n\nA typical chain runs from the measurand through a primary sensing element, then to signal conditioning, processing, and display or communication. Some sensors generate an output directly, while others vary an electrical property and require excitation.\n\nA transfer function relates the stimulus to the output. In a linear model V = a + bT, a is the intercept and b is sensitivity. Two known temperatures determine these coefficients. Nonlinear behavior can require extra points or a piecewise model.\n\nSelection depends on range, accuracy, resolution, repeatability, hysteresis, nonlinearity, environment, and interface compatibility. A voltage-output sensor generally benefits from low source impedance and a high-impedance receiver.",
     "summary": "Choose a sensor by how well it measures the quantity under actual operating conditions. Calibration establishes the input–output relationship, while the electrical interface affects how accurately that relationship is observed.",
@@ -323,7 +325,7 @@ window.CORNELL_WEEKS = [
   {
     "week": 7,
     "title": "Basic Control Devices",
-    "date": "",
+    "date": "September 24, 2026",
     "cues": "What do poles and throws describe?\nHow does a relay differ from a solenoid?\nHow do BJTs and MOSFETs act as switches?\nWhat happens when a coil is switched off?",
     "notes": "A switch opens or closes a circuit or routes current to an alternate path. A pole is an independently switched circuit, and a throw is a selectable connection. SPST provides on/off control, SPDT selects one of two paths, and DPDT switches two paths together.\n\nAn electromechanical relay energizes a coil to move contacts. Normally open and normally closed describe the contacts with the coil de-energized. A solenoid uses a coil to move a plunger and produce mechanical action.\n\nSolid-state switches use semiconductors. BJT drive uses base current, while a MOSFET is controlled by gate-to-source voltage. Choose a device that suits the load and the available drive.\n\nAn inductive coil can produce a voltage spike when its current is interrupted. In a typical DC coil circuit, a correctly oriented flyback diode provides a path for the decaying current.",
     "summary": "Choose the switching device by what the system needs to do. Switches route current, relays use one circuit to operate contacts in another, and solenoids turn electrical control into motion.",
@@ -363,7 +365,7 @@ window.CORNELL_WEEKS = [
   {
     "week": 9,
     "title": "Introduction to Measurement Theory",
-    "date": "",
+    "date": "October 21, 2026",
     "cues": "What does it mean to compare a quantity with a standard?\nWhat is the difference between accuracy and precision?\nWhat information does each scale of measurement preserve?\nWhich errors can affect a measurement?",
     "notes": "Measurement assigns a value to a quantity or characteristic according to a defined procedure. Physical measurements compare a quantity against a reference and report a value in an appropriate unit.\n\nAccuracy describes closeness to a reference value. Precision describes how closely repeated readings agree. For example, a group of nearly identical readings can still be biased by an instrument offset.\n\nNominal scales classify. Ordinal scales add order without establishing equal gaps. Interval scales have equal gaps but an arbitrary zero, as with temperature in Celsius. Ratio scales have a meaningful zero, allowing ratio comparisons.\n\nInstrument limitations, environmental changes, and observation methods can affect readings. Repeating measurements helps reveal random variation, while a reference comparison can reveal systematic bias.",
     "summary": "A measurement is meaningful when the scale, units, and reference are clear. Evaluating both bias and repeatability helps determine how confidently a result can be used.",
@@ -505,7 +507,7 @@ window.CORNELL_WEEKS = [
   {
     "week": 16,
     "title": "Calibration and Instrumentation of Mixed-Signal Systems",
-    "date": "2026-11-06",
+    "date": "November 6, 2026",
     "cues": "What does calibration establish?\nHow do offset, gain, and nonlinearity differ?\nWhich instruments fit analog and digital measurements?\nWhat belongs in a calibration record?",
     "notes": "A mixed-signal chain may run from a sensor through conditioning and an ADC to a processor, then through a DAC to an actuator. Errors can enter at each stage, including reference drift, noise, quantization, and sampling-clock timing effects.\n\nCalibration compares readings or generated outputs with known references. Offset shifts the response, gain error changes its slope, and nonlinearity changes its shape. Two reference points can establish an offset and slope for a linear response. Additional points can check or characterize deviations across the range.\n\nA digital multimeter is useful for stable voltage measurements. Use an oscilloscope for waveform timing and shape, a signal generator for known test inputs, and a logic analyzer for digital signals. A stable reference helps separate test-source variation from the circuit’s behavior.\n\nRecord the reference and instrument, settings and conditions, readings before and after adjustment, and the acceptance criteria or uncertainty where applicable. Verify the result at multiple points across the intended range.",
     "summary": "Calibrate the system against known references, then verify the recovered transfer behavior. Instrument choice and records matter because they establish what was tested and how confidently the results can be compared.",
@@ -571,7 +573,7 @@ function notes(index) {
     target.append(node(labelText, label));
     target.append(valueBlock(data[key]));
   };
-  add(header, "date", "Date", "date");
+  if (data.date) header.append(node("p", data.date, "note-date"));
 
   const columns = node("div", "", "columns");
   const cues = node("section");
@@ -613,6 +615,7 @@ function weekIndex() {
       const card = link("", "week-" + data.week, "card");
       card.append(node("strong", "Week " + String(data.week).padStart(2, "0")),
         node("span", data.title || "Module title pending"));
+      if (data.date) card.append(node("span", data.date, "note-date"));
       grid.append(card);
     });
     const total = grid.childElementCount;
