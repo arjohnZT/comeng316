@@ -66,9 +66,8 @@ h1, h2, h3, p { margin-block: 0 .65rem; }
 h1 { font-size: clamp(2rem, 7vw, 4.65rem); line-height: 1.05; letter-spacing: -.055em; margin-block: .6rem 1.5rem; }
 .hero .primary { background: #daddff; color: #16194b; border-color: #daddff; }
 .hero .button:not(.primary) { background: #ffffff18; color: #fff; border-color: #ffffff62; }
-.tools { margin: 1rem 0 1.75rem; }
 #status { color: var(--muted); font-size: .875rem; }
-#view { scroll-margin-top: 5.25rem; }
+#view { margin-top: 1.5rem; scroll-margin-top: 5.25rem; }
 .page { animation: appear .25s ease-out; }
 @keyframes appear { from { opacity: 0; transform: translateY(5px); } }
 .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 225px), 1fr)); gap: 1rem; }
@@ -144,9 +143,6 @@ nav a[aria-current] { background: color-mix(in srgb, var(--accent) 12%, var(--pa
 .hero h1 { font-weight: 800; font-size: clamp(2.3rem, 6.5vw, 5.15rem); }
 .hero .eyebrow { letter-spacing: .04em; }
 .hero .button { min-height: 44px; display: inline-flex; align-items: center; }
-.tools { justify-content: flex-end; gap: .65rem; margin: 1.35rem 0 .9rem; }
-#status:empty { display: none; }
-#edit { order: 1; }
 .section-head { gap: 1rem; margin-bottom: .55rem; }
 .section-head h2 { font-size: clamp(1.5rem, 3vw, 2.15rem); letter-spacing: -.045em; margin: 0; }
 .section-head label { width: min(100%, 18rem); }
@@ -197,12 +193,8 @@ footer { margin-top: 2rem; border-top: 1px solid var(--line); padding-block: 1.4
         <a class="button" href="#quizzes">Quizzes</a>
       </div>
     </section>
-    <section class="tools actions" aria-label="Editing tools">
-      <button id="edit" aria-pressed="false">Edit mode</button>
-      <span id="status" role="status"></span>
-    </section>
-    <div id="view"></div>
-    <noscript>Enable JavaScript to browse or edit the weekly notes.</noscript>
+      <div id="view"></div>
+    <noscript>Enable JavaScript to browse the weekly notes.</noscript>
   </main>
   <footer class="wrap">Arjohn Tagaruma | ComEng 316</footer>
   <button id="back-top" hidden>Back to top</button>
@@ -536,51 +528,13 @@ window.CORNELL_WEEKS = [
 "use strict";
 
 const $ = (id) => document.getElementById(id);
-const storageKey = "comeng316-drafts-v1";
 const defaults = window.CORNELL_WEEKS;
 const quizFields = { title: "Quiz title", score: "Score", review: "Notes / review" };
-let editing = false;
 let query = "";
-let drafts = [];
 
 function getStored(key) {
   try { return localStorage.getItem(key); }
   catch { return null; }
-}
-
-function saveDrafts(next, message) {
-  drafts = next;
-  try {
-    localStorage.setItem(storageKey, JSON.stringify(drafts));
-    $("status").textContent = message;
-  } catch {
-    $("status").textContent = "Browser storage is unavailable or full. Edits may be lost when you leave.";
-  }
-}
-
-try {
-  const stored = JSON.parse(getStored(storageKey));
-  if (Array.isArray(stored)) drafts = stored;
-} catch {
-  $("status").textContent = "The saved draft could not be read. Showing published content.";
-}
-
-function weekData(index) {
-  const base = defaults[index];
-  const draft = drafts[index] || {};
-  return {
-    ...base, ...draft, week: base.week,
-    reflection: { ...base.reflection, ...draft.reflection },
-    quiz: { ...base.quiz, ...draft.quiz }
-  };
-}
-
-function update(index, key, value, child) {
-  const next = [...drafts];
-  const entry = { ...drafts[index] };
-  entry[key] = child ? { ...entry[key], [child]: value } : value;
-  next[index] = entry;
-  saveDrafts(next, "Saved in this browser.");
 }
 
 function node(tag, text = "", css = "") {
@@ -603,29 +557,20 @@ function button(label, action) {
   return control;
 }
 
-function field(label, value, change, type = "") {
-  if (!editing) return node("div", value || "Pending", value ? "value" : "value empty");
-  const wrapper = node("label", "", "field");
-  const control = node(type ? "input" : "textarea");
-  if (type) control.type = type;
-  else control.rows = 4;
-  control.value = value;
-  control.addEventListener("input", () => change(control.value));
-  wrapper.append(node("span", label), control);
-  return wrapper;
+function valueBlock(value) {
+  return node("div", value || "Pending", value ? "value" : "value empty");
 }
 
 function notes(index) {
-  const data = weekData(index);
+  const data = defaults[index];
   const article = node("article", "", "sheet");
   const header = node("header");
   header.append(node("p", "Week " + data.week), node("h1", data.title || "Module title"));
   const add = (target, key, label, type) => {
     const labelText = type ? "p" : "h2";
-    if (!editing || !type) target.append(node(labelText, label));
-    target.append(field(label, data[key], (value) => update(index, key, value), type));
+    target.append(node(labelText, label));
+    target.append(valueBlock(data[key]));
   };
-  if (editing) header.append(field("Module title", data.title, (value) => update(index, "title", value), "text"));
   add(header, "date", "Date", "date");
 
   const columns = node("div", "", "columns");
@@ -642,10 +587,7 @@ function notes(index) {
   if (index > 0) navigation.append(link("Previous week", "week-" + index));
   navigation.append(link("All weeks", "weeks"));
   if (index < defaults.length - 1) navigation.append(link("Next week", "week-" + (index + 2)));
-  navigation.append(button("Print notes", () => {
-    if (editing) setEditing(false);
-    window.print();
-  }));
+  navigation.append(button("Print notes", () => window.print()));
   return [article, navigation];
 }
 
@@ -665,7 +607,7 @@ function weekIndex() {
     grid.replaceChildren();
     const keywords = query.toLowerCase().trim().split(/\s+/);
     defaults.forEach((_, index) => {
-      const data = weekData(index);
+      const data = defaults[index];
       const text = ["Week " + data.week, data.title, data.date, data.cues, data.notes, data.summary].join(" ").toLowerCase();
       if (!keywords.every((keyword) => text.includes(keyword))) return;
       const card = link("", "week-" + data.week, "card");
@@ -688,10 +630,10 @@ function weekIndex() {
 function quizzes() {
   const list = node("div", "", "stack");
   defaults.forEach((_, index) => {
-    const data = weekData(index).quiz;
-    if (!editing && !data.title && !data.review && !data.score && !data.photo) return;
+    const data = defaults[index].quiz;
+    if (!data.title && !data.review && !data.score && !data.photo) return;
     const entry = node("details", "", "card");
-    entry.open = editing || Boolean(data.photo);
+    entry.open = Boolean(data.photo);
     entry.append(node("summary", data.title || "Untitled quiz"));
     const body = node("div");
     if (data.photo?.startsWith("data:image/jpeg;base64,")) {
@@ -702,11 +644,10 @@ function quizzes() {
       body.append(photo);
     }
     Object.entries(quizFields).forEach(([key, label]) => {
-      if (!editing && (key === "title" || !data[key])) return;
+      if (key === "title" || !data[key]) return;
       const block = node("div", "", "field");
-      if (!editing) block.append(node("h3", label));
-      const type = key === "review" ? "" : "text";
-      block.append(field(label, data[key], (value) => update(index, "quiz", value, key), type));
+      block.append(node("h3", label));
+      block.append(valueBlock(data[key]));
       body.append(block);
     });
     entry.append(body);
@@ -736,14 +677,6 @@ function render() {
   document.title = (isWeek ? "Week " + (index + 1) + " | " : "") + "Cornell Notes: ComEng 316";
 }
 
-function setEditing(value) {
-  editing = value;
-  $("edit").textContent = editing ? "Done editing" : "Edit mode";
-  $("edit").setAttribute("aria-pressed", String(editing));
-  render();
-}
-
-$("edit").onclick = () => setEditing(!editing);
 function setTheme(theme) {
   document.documentElement.dataset.theme = theme;
   $("theme").textContent = theme === "dark" ? "Light mode" : "Dark mode";
