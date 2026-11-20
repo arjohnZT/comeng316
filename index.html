@@ -168,7 +168,6 @@ footer { margin-top: 2rem; border-top: 1px solid var(--line); padding-block: 1.4
 @media (max-width: 390px) { .grid { grid-template-columns: minmax(0, 1fr); } a.card { min-height: auto; } }
 @media print { .wrap { width: 100%; } .sheet { padding: 0; } .columns > section:first-child, .summary { background: #fff; } }
 
-.note-date, a.card .note-date { color: var(--muted); font-size: .875rem; font-weight: 500; }
 </style>
 </head>
 <body>
@@ -560,7 +559,7 @@ function button(label, action) {
 }
 
 function valueBlock(value) {
-  return node("div", value || "Pending", value ? "value" : "value empty");
+  return node("div", value, "value");
 }
 
 function notes(index) {
@@ -573,7 +572,6 @@ function notes(index) {
     target.append(node(labelText, label));
     target.append(valueBlock(data[key]));
   };
-  if (data.date) header.append(node("p", data.date, "note-date"));
 
   const columns = node("div", "", "columns");
   const cues = node("section");
@@ -610,12 +608,11 @@ function weekIndex() {
     const keywords = query.toLowerCase().trim().split(/\s+/);
     defaults.forEach((_, index) => {
       const data = defaults[index];
-      const text = ["Week " + data.week, data.title, data.date, data.cues, data.notes, data.summary].join(" ").toLowerCase();
+      const text = ["Week " + data.week, data.title, data.cues, data.notes, data.summary].join(" ").toLowerCase();
       if (!keywords.every((keyword) => text.includes(keyword))) return;
       const card = link("", "week-" + data.week, "card");
       card.append(node("strong", "Week " + String(data.week).padStart(2, "0")),
-        node("span", data.title || "Module title pending"));
-      if (data.date) card.append(node("span", data.date, "note-date"));
+        node("span", data.title || "Cornell Notes"));
       grid.append(card);
     });
     const total = grid.childElementCount;
